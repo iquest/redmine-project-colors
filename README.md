@@ -8,7 +8,20 @@ The plugin does not require any migration, it just adds two new fields to the Re
 This plugin is a fork of [Redmine Progressive Projects List Plugin](https://github.com/ergoserv/redmine-progressive-projects-list), although almost nothing left from the original code.
 
 ## Compatibility
-I am using it with Redmine 4.1.6, but it should work with any Redmine version starting from 4.0.0.
+The plugin is tested with Redmine 7.0.3. It can also work with older Redmine versions starting from 4.0.0.
+
+The plugin does not override Redmine helper methods. It adds the CSS class `project-color-<value_id>` to each colored project and adds CSS rules to the HTML head of each page.
+The plugin colors the project names in these places:
+- The project list (board view and list view).
+- The subproject list on the project overview page.
+- The project list on the user page.
+- The project name in the page header.
+
+## Tests
+Put the plugin into `<redmine_path>/plugins/redmine_project_colors` and run this command in the Redmine directory:
+```sh
+RAILS_ENV=test bin/rails redmine:plugins:test NAME=redmine_project_colors
+```
 
 ## Installation
 - Download the plugin archive and extract it to `<redmine_path>/plugins`.
@@ -29,6 +42,7 @@ I am using it with Redmine 4.1.6, but it should work with any Redmine version st
 	3: #0000ff
 	```
 	If you don't provide a color for a value, it will be displayed in standard color defined by your theme.
+	The plugin accepts hexadecimal colors (`#rgb`, `#rgba`, `#rrggbb`, `#rrggbbaa`) and CSS color names (for example `red`). The plugin ignores lines with a different format.
 
 ## License
 This plugin is licensed under the MIT license. See LICENSE for details.
