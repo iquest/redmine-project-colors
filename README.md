@@ -16,10 +16,19 @@ The plugin shows the badges in these places:
 - The project list (board view and list view).
 - The subproject list on the project overview page.
 - The project list on the user page.
-- The project name and the parent projects in the page header.
+- The parent projects in the page header.
 - The "Project" column in the issue lists and the time entry lists.
 - The group headers of lists that are grouped by project (for example "My page").
 - The Gantt chart, the news and the `project:` wiki links.
+- The project jump box in the header.
+
+The page header of a colored project gets the project color as background, so the project name in the header has no badge.
+The plugin also sets the CSS variable `--color-header-background`, which the default and the alternate Redmine themes use.
+- The "Spent time" block of "My page" and the activity.
+
+Redmine shows the project name without a link in the "Spent time" block and in the activity.
+For these places the plugin uses its own copies of the partials `my/blocks/_timelog` and `activities/_activities`.
+Check these copies when you update Redmine.
 
 ## Tests
 Put the plugin into `<redmine_path>/plugins/redmine_project_colors` and run this command in the Redmine directory:

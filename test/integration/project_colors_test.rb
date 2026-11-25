@@ -51,6 +51,35 @@ class ProjectColorsTest < Redmine::IntegrationTest
     assert_equal 1, classes.count("project-color-#{@red.id}")
   end
 
+  def test_project_name_in_my_page_timelog
+    # The fixture time entries of jsmith are from 2007.
+    TimeEntry.where(user_id: 2, project_id: 1).update_all(spent_on: Date.today)
+    pref = User.find(2).pref
+    pref.my_page_layout = { 'left' => ['timelog'], 'right' => [] }
+    pref.save!
+    log_user('jsmith', 'jsmith')
+    get '/my/page'
+    assert_response :success
+    assert_select "td.subject span.project-color-#{@red.id}", text: 'eCookbook'
+  end
+
+  def test_project_name_in_activity
+    log_user('admin', 'admin')
+    with_settings activity_days_default: '10000' do
+      get '/activity', params: { show_issues: 1 }
+    end
+    assert_response :success
+    assert_select "dt span.project.project-color-#{@red.id}", text: 'eCookbook'
+    assert_select "dt span.project:not([class*='project-color-'])", text: 'OnlineStore'
+  end
+
+  def test_project_jump_box_style
+    get '/projects'
+    assert_response :success
+    assert_select 'style', text: %r{#project-jump \.drdn-items a\[href\$="/projects/ecookbook"\] > span.*background-color: #ff0000 !important;}
+    assert_select 'style', text: /padding-inline-start:16px"\] \{ margin-inline-start: 16px; \}/
+  end
+
   def test_color_map_ignores_invalid_lines
     assert_equal({ @red.id.to_s => '#ff0000', @blue.id.to_s => 'blue' }, ProjectColors.color_map)
   end
@@ -63,7 +92,7 @@ class ProjectColorsTest < Redmine::IntegrationTest
   def test_project_list_in_board_view
     get '/projects', params: { display_type: 'board' }
     assert_response :success
-    assert_select "style", text: /a\.project-color-#{@red.id}, tr\.project-color-#{@red.id} td\.name a \{ background-color: #ff0000 !important; \}/
+    assert_select "style", text: /a\.project-color-#{@red.id}, span\.project-color-#{@red.id}, tr\.project-color-#{@red.id} td\.name a \{ background-color: #ff0000 !important; \}/
     assert_select "a.project.project-color-#{@red.id}[href='/projects/ecookbook']"
     assert_select '#header h1 .current-project', 0
   end
@@ -77,14 +106,18 @@ class ProjectColorsTest < Redmine::IntegrationTest
   def test_project_overview_header
     get '/projects/ecookbook'
     assert_response :success
-    assert_select 'style', text: /#header h1 \.current-project \{ color: #fff !important;.*background-color: #ff0000 !important; \}/
+    assert_select 'style', text: /#header \{ background: #ff0000 !important; \}/
+    assert_select 'style', text: /:root \{ --color-header-background: #ff0000; \}/
+    assert_select 'style', text: /current-project/, count: 0
+    assert_select 'style', text: /body\.theme-A1\.has-main-menu #header \{ padding-block-end: 0; \}/
     assert_select '#header h1 .current-project', text: 'eCookbook'
   end
 
   def test_header_of_project_without_color
     get '/projects/subproject1'
     assert_response :success
-    assert_select 'style', text: /current-project/, count: 0
+    assert_select 'style', text: /#header \{ background/, count: 0
+    assert_select 'style', text: /--color-header-background/, count: 0
   end
 
   def test_no_style_when_field_is_not_specified

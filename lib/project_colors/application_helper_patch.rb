@@ -12,6 +12,16 @@ module ProjectColors::ApplicationHelperPatch
     super(project, options, html_options)
   end
 
+  # Returns the project name in a span with the project color class.
+  # Returns the escaped project name if the project has no color.
+  # The views of the plugin use it where Redmine shows the project name without a link.
+  def project_colors_name_tag(project)
+    color_class = project_colors_css_class(project)
+    return h(project.to_s) if color_class.nil?
+
+    content_tag(:span, project.to_s, class: color_class)
+  end
+
   private
 
   # Reads the colors of all projects once for each view.

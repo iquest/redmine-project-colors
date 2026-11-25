@@ -23,4 +23,5 @@ Project.prepend ProjectColors::ProjectPatch unless Project < ProjectColors::Proj
 unless ApplicationHelper < ProjectColors::ApplicationHelperPatch
   ApplicationHelper.prepend ProjectColors::ApplicationHelperPatch
 end
+MyHelper.prepend ProjectColors::MyHelperPatch unless MyHelper < ProjectColors::MyHelperPatch
 ProjectColors::Hooks
