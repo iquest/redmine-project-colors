@@ -8,8 +8,10 @@ module ProjectColors
   # Links of colored projects in the project lists.
   BADGE_SELECTOR = "a[class*=\"#{CSS_CLASS_PREFIX}\"], tr[class*=\"#{CSS_CLASS_PREFIX}\"] td.name a".freeze
 
-  # The rules use !important because themes can set the color of links and of the header.
-  BADGE_STYLE = 'color: #fff !important; padding: 0.1em 0.5em; border-radius: 0.4em; ' \
+  # The rules use !important because themes and Redmine rules with a higher specificity
+  # can set the color and the padding of links. For example, "#projects-index a.icon-user"
+  # removes the left padding of the projects where the user is a member.
+  BADGE_STYLE = 'color: #fff !important; padding: 0.1em 0.5em !important; border-radius: 0.4em; ' \
                 'text-decoration: none; display: inline-block; line-height: 1.4;'.freeze
 
   class << self
