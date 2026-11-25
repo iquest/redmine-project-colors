@@ -5,18 +5,19 @@ end
 Redmine::Plugin.register :redmine_project_colors do
   name 'Redmine Project Colors plugin'
   author 'Jan Vojtech'
-  description 'Allows to change project name colors in the project list page.'
-  version '1.0.0'
-  url 'https://github.com/klasyc/redmine_project_colors'
+  description 'Changes the color of project names according to a custom field.'
+  version '2.0.0'
+  url 'https://github.com/iquest/redmine-project-colors'
   author_url 'https://github.com/klasyc'
-  requires_redmine version_or_higher: '3.3'
+  requires_redmine version_or_higher: '4.0'
 
   settings default: {
-		'color_field_id'           => '0',
-		'color_assignments'        => '',
+    'color_field_id'    => '0',
+    'color_assignments' => '',
   }, partial: 'settings/project_colors'
 end
 
-require 'redmine_project_colors'
-require 'project_colors/projects_helper_patch'
-require 'project_colors/application_helper_patch'
+# Redmine 5.1 and later run this file in a to_prepare block.
+# The plugin lib directory is an autoload path. A reference to a constant loads its file.
+Project.prepend ProjectColors::ProjectPatch unless Project < ProjectColors::ProjectPatch
+ProjectColors::Hooks
