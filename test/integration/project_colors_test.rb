@@ -2,7 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
 class ProjectColorsTest < Redmine::IntegrationTest
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-           :enabled_modules, :custom_fields, :custom_values
+           :enabled_modules, :custom_fields, :custom_values, :trackers, :projects_trackers,
+           :issue_statuses, :issues, :enumerations, :time_entries, :versions, :workflows
 
   def setup
     @field = ProjectCustomField.create!(
@@ -19,6 +20,37 @@ class ProjectColorsTest < Redmine::IntegrationTest
     }
   end
 
+  def test_link_to_project_adds_color_class
+    log_user('admin', 'admin')
+    get '/issues', params: { set_filter: 1, c: %w(project subject), sort: 'id' }
+    assert_response :success
+    assert_select "td.project a.project-color-#{@red.id}[href='/projects/ecookbook']"
+    assert_select "td.project a[href='/projects/onlinestore']:not([class*='project-color-'])"
+  end
+
+  def test_link_to_project_in_group_header
+    log_user('admin', 'admin')
+    get '/issues', params: { set_filter: 1, group_by: 'project', c: %w(subject) }
+    assert_response :success
+    assert_select "tr.group span.name a.project-color-#{@red.id}"
+  end
+
+  def test_link_to_project_in_time_entries
+    log_user('admin', 'admin')
+    get '/time_entries', params: { set_filter: 1, c: %w(project spent_on hours) }
+    assert_response :success
+    assert_select "td.project a.project-color-#{@red.id}"
+  end
+
+  def test_link_to_project_keeps_other_classes_once
+    get '/projects', params: { display_type: 'board' }
+    assert_response :success
+    link = css_select("a[href='/projects/ecookbook']").first
+    classes = link['class'].split
+    assert_includes classes, 'project'
+    assert_equal 1, classes.count("project-color-#{@red.id}")
+  end
+
   def test_color_map_ignores_invalid_lines
     assert_equal({ @red.id.to_s => '#ff0000', @blue.id.to_s => 'blue' }, ProjectColors.color_map)
   end
@@ -31,7 +63,7 @@ class ProjectColorsTest < Redmine::IntegrationTest
   def test_project_list_in_board_view
     get '/projects', params: { display_type: 'board' }
     assert_response :success
-    assert_select "style", text: /a\.project-color-#{@red.id}, tr\.project-color-#{@red.id} td\.name a \{ color: #ff0000; \}/
+    assert_select "style", text: /a\.project-color-#{@red.id}, tr\.project-color-#{@red.id} td\.name a \{ background-color: #ff0000 !important; \}/
     assert_select "a.project.project-color-#{@red.id}[href='/projects/ecookbook']"
     assert_select '#header h1 .current-project', 0
   end
@@ -45,7 +77,7 @@ class ProjectColorsTest < Redmine::IntegrationTest
   def test_project_overview_header
     get '/projects/ecookbook'
     assert_response :success
-    assert_select 'style', text: /#header h1 \.current-project \{ color: #ff0000; \}/
+    assert_select 'style', text: /#header h1 \.current-project \{ color: #fff !important;.*background-color: #ff0000 !important; \}/
     assert_select '#header h1 .current-project', text: 'eCookbook'
   end
 

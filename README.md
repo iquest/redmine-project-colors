@@ -10,12 +10,16 @@ This plugin is a fork of [Redmine Progressive Projects List Plugin](https://gith
 ## Compatibility
 The plugin is tested with Redmine 7.0.3. It can also work with older Redmine versions starting from 4.0.0.
 
-The plugin does not override Redmine helper methods. It adds the CSS class `project-color-<value_id>` to each colored project and adds CSS rules to the HTML head of each page.
-The plugin colors the project names in these places:
+The plugin does not copy Redmine helper methods. It adds the CSS class `project-color-<value_id>` to `Project#css_classes` and to the links from `link_to_project`. It also adds CSS rules to the HTML head of each page.
+The plugin shows each colored project name as a badge: white text on a background in the project color. Use dark colors, because the text is white.
+The plugin shows the badges in these places:
 - The project list (board view and list view).
 - The subproject list on the project overview page.
 - The project list on the user page.
-- The project name in the page header.
+- The project name and the parent projects in the page header.
+- The "Project" column in the issue lists and the time entry lists.
+- The group headers of lists that are grouped by project (for example "My page").
+- The Gantt chart, the news and the `project:` wiki links.
 
 ## Tests
 Put the plugin into `<redmine_path>/plugins/redmine_project_colors` and run this command in the Redmine directory:
