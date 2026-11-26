@@ -1,10 +1,12 @@
+<% color_fields = ProjectCustomField.where(field_format: 'color').sorted.to_a %>
 <div class="tabular settings">
-	<p>
-		<%= setting_label(:color_field_id) %>
-		<%= number_field_tag('settings[color_field_id]', @settings['color_field_id']) %>
-	</p>
-	<p>
-		<%= setting_label(:color_assignments) %>
-		<%= text_area_tag('settings[color_assignments]', @settings['color_assignments']) %>
-	</p>
+  <p>
+    <%= setting_label(:color_field_id) %>
+    <%= select_tag('settings[color_field_id]',
+                   options_for_select([['', '']] + color_fields.map { |field| [field.name, field.id.to_s] },
+                                      @settings['color_field_id'].to_s)) %>
+    <% if color_fields.empty? %>
+      <em class="info"><%= l(:text_project_colors_no_color_field) %></em>
+    <% end %>
+  </p>
 </div>

@@ -1,0 +1,57 @@
+/* Edit form of the "Color" custom field: color picker, text field and preview. */
+.project-colors-input {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+}
+.project-colors-picker {
+  inline-size: 2.5em;
+  block-size: 1.8em;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+}
+.project-colors-preview {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+}
+.project-colors-preview[hidden] {
+  display: none;
+}
+.project-colors-badge,
+.project-colors-swatch {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  border-radius: 0.4em;
+  line-height: 1.4;
+}
+.project-colors-info {
+  color: #666;
+  font-size: 0.9em;
+}
+.project-colors-ratio {
+  font-weight: bold;
+}
+.project-colors-level {
+  font-weight: bold;
+}
+.project-colors-level-aaa {
+  color: #2b8a3e;
+}
+.project-colors-level-aaa::after {
+  content: " \2713";
+}
+.project-colors-level-aa {
+  color: #c25e00;
+}
+.project-colors-swatch {
+  font-family: monospace;
+}
+.project-colors-adjust[hidden] {
+  display: none;
+}

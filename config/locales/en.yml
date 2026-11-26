@@ -1,3 +1,9 @@
 en:
-  setting_color_field_id: "ID of the custom key/value list field which contains the project color"
-  setting_color_assignments: "Color assignments (value_id1: html_color\\n value_id2: another_html_color)"
+  setting_color_field_id: "Project custom field with the project color"
+  label_project_colors_color: "Color"
+  label_project_colors_pick: "Pick a color"
+  label_project_colors_white_text: "White text"
+  label_project_colors_black_text: "Black text"
+  text_project_colors_no_color_field: "Create a project custom field with the format \"Color\"."
+  button_project_colors_adjust_contrast: "Adjust contrast"
+  text_project_colors_adjust_contrast: "Change the lightness of the color, so that the text has a contrast ratio of at least %{ratio}:1 (WCAG AAA)."
