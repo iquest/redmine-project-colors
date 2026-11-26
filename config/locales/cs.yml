@@ -1,3 +1,9 @@
 cs:
-  setting_color_field_id: "ID vlastního pole (klíč/hodnota), kde je uložena barva projektu"
-  setting_color_assignments: "Přiřazení barev (value_id1: #html_color\\n value_id2: #another_html_color)"
+  setting_color_field_id: "Vlastní pole projektu s barvou projektu"
+  label_project_colors_color: "Barva"
+  label_project_colors_pick: "Vyberte barvu"
+  label_project_colors_white_text: "Bílý text"
+  label_project_colors_black_text: "Černý text"
+  text_project_colors_no_color_field: "Vytvořte vlastní pole projektu s formátem „Barva“."
+  button_project_colors_adjust_contrast: "Upravit kontrast"
+  text_project_colors_adjust_contrast: "Změní světlost barvy tak, aby měl text kontrast alespoň %{ratio}:1 (WCAG AAA)."
